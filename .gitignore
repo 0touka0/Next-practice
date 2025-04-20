@@ -1,0 +1,3 @@
+# 自己署名証明書を無視
+docker/nginx/localhost.key
+docker/nginx/localhost.crt
