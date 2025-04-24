@@ -1,0 +1,24 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.title {
+  margin-bottom: 40px;
+  font-weight: 400;
+  font-size: 35px;
+  line-height: 45px;
+  color: #8b7969;
+  text-align: center;
+}
+
+.formGroup {
+  width: 750px;
+  height: 550px;
+  margin: 0 auto;
+  padding: 80px 100px;
+  background-color: #fff;
+  border: 1px solid #c5b9b0;
+  border-radius: 10px;
+}
