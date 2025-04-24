@@ -33,9 +33,11 @@ export default function Login() {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost/api/login", { email, password }, { withCredentials: true });
+      // CSRFトークンを取得
+      await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
+      // ログインリクエスト
+      await axios.post("/api/login", { email, password }, { withCredentials: true });
 
-      setSuccessMessage("ログインが完了しました");
       window.location.href = "/"; // トップページにリダイレクト
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -61,6 +63,7 @@ export default function Login() {
         <Input
           id="email"
           label="メールアドレス"
+          type="email"
           value={email}
           placeholder="例: test@example.com"
           onChange={handleEmailChange}
@@ -70,6 +73,7 @@ export default function Login() {
         <Input
           id="password"
           label="パスワード"
+          type="password"
           value={password}
           placeholder="例: coachtech1106"
           onChange={handlePasswordChange}

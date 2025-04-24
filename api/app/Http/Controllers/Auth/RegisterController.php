@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -25,12 +26,10 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        $cookie = cookie('auth_token', $token, 60 * 24 * 7, null, null, true, true); // 7日間有効、httpOnly, secure
+        Auth::login($user); // セッションログイン
 
         return response()->json([
             'user' => $user,
-        ], 201)->withCookie($cookie);
+        ], 201);
     }
 }

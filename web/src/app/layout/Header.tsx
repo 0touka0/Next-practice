@@ -16,9 +16,11 @@ export default function Header() {
       .get("/api/auth/check", { withCredentials: true })
       .then((response) => {
         setIsLoggedIn(response.data.authenticated);
+        console.log("ログイン状態を確認できました。");
       })
       .catch(() => {
         setIsLoggedIn(false);
+        console.log("ログイン状態を確認できませんでした。");
       });
   }, []);
 

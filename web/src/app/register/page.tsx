@@ -59,10 +59,11 @@ export default function Register() {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost/api/register", formData, { withCredentials: true });
+      await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
+      await axios.post("/api/register", formData, { withCredentials: true });
 
-      setSuccessMessage("登録が完了しました");
       resetForm();
+      window.location.href = "/login";
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 422) {
@@ -87,6 +88,7 @@ export default function Register() {
         <Input
           id="username"
           label="お名前"
+          type="text"
           value={formData.name}
           placeholder="例: 山田　太郎"
           onChange={handleInputChange("name")}
@@ -96,6 +98,7 @@ export default function Register() {
         <Input
           id="email"
           label="メールアドレス"
+          type="email"
           value={formData.email}
           placeholder="例: test@example.com"
           onChange={handleInputChange("email")}
@@ -105,6 +108,7 @@ export default function Register() {
         <Input
           id="password"
           label="パスワード"
+          type="password"
           value={formData.password}
           placeholder="例: coachtech1106"
           onChange={handleInputChange("password")}

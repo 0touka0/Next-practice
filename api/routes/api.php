@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -20,10 +21,16 @@ Route::post('/register', RegisterController::class);
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::get('/auth/check', function (Request $request) {
-    return response()->json(['authenticated' => Auth::check()]);
+    $isAuthenticated = Auth::check();
+    return response()->json(['authenticated' => $isAuthenticated]);
 })->middleware('auth:sanctum');
 
 Route::post('/logout', function (Request $request) {
-    $request->user()->tokens()->delete();
+    Auth::guard('web')->logout(); // セッション認証ユーザーをログアウト
+
+    $request->session()->invalidate();       // セッションを無効にする
+    $request->session()->regenerateToken();  // CSRFトークンを再生成（セキュリティ対策）
+
+    // $request->user()->tokens()->delete();
     return response()->json(['message' => 'ログアウトしました。']);
 })->middleware('auth:sanctum');

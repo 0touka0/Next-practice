@@ -1,7 +1,7 @@
 import { InputType } from "../../types/input";
 import styles from "./Input.module.css";
 
-export default function Input({ id, label, value, placeholder, onChange, error }: InputType) {
+export default function Input({ id, label, type, value, placeholder, onChange, error }: InputType) {
   return (
     <div className={styles.inputGroup}>
       <label htmlFor={id} className={styles.label}>
@@ -9,7 +9,7 @@ export default function Input({ id, label, value, placeholder, onChange, error }
       </label>
       <input
         id={id}
-        type="text"
+        type={type}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
