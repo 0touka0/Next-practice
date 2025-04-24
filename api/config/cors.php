@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000'], // ← Next.js側のURL
+    'allowed_origins' => ['http://localhost:3000', 'https://localhost'], // HTTPとHTTPSの両方を許可
 
     'allowed_origins_patterns' => [],
 
