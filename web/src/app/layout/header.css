@@ -3,6 +3,7 @@
   width: 1500px;
   height: 100px;
   background: #ffffff;
+  border-bottom: 1px solid #E0DFDE;
   display: flex;
   align-items: center;
   justify-content: space-between;

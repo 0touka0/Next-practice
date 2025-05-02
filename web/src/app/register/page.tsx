@@ -85,37 +85,54 @@ export default function Register() {
       {errors.general && <div className={styles.errorMessage}>{errors.general}</div>}
 
       <div className={styles.formGroup}>
-        <Input
-          id="username"
-          label="お名前"
-          type="text"
-          value={formData.name}
-          placeholder="例: 山田　太郎"
-          onChange={handleInputChange("name")}
-          error={errors.name?.[0]}
-        />
+        <div className={styles.formField}>
+          <label htmlFor="username" className={styles.label}>
+            お名前
+          </label>
+          <Input
+            id="username"
+            name="name"
+            type="text"
+            value={formData.name}
+            placeholder="例: 山田　太郎"
+            onChange={handleInputChange("name")}
+          />
+          <div className="errorMessage">{errors.name && errors.name[0]}</div>
+        </div>
 
-        <Input
-          id="email"
-          label="メールアドレス"
-          type="email"
-          value={formData.email}
-          placeholder="例: test@example.com"
-          onChange={handleInputChange("email")}
-          error={errors.email?.[0]}
-        />
+        <div className={styles.formField}>
+          <label htmlFor="email" className={styles.label}>
+            メールアドレス
+          </label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            placeholder="例: test@example.com"
+            onChange={handleInputChange("email")}
+          />
+          <div className="errorMessage">{errors.email && errors.email[0]}</div>
+        </div>
 
-        <Input
-          id="password"
-          label="パスワード"
-          type="password"
-          value={formData.password}
-          placeholder="例: coachtech1106"
-          onChange={handleInputChange("password")}
-          error={errors.password?.[0]}
-        />
+        <div className={styles.formField}>
+          <label htmlFor="password" className={styles.label}>
+            パスワード
+          </label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={formData.password}
+            placeholder="例: coachtech1106"
+            onChange={handleInputChange("password")}
+          />
+          <div className="errorMessage">{errors.password && errors.password[0]}</div>
+        </div>
 
-        <Button onClick={handleSubmit}>登録</Button>
+        <Button onClick={handleSubmit} variant="primary" size="large" display="block" className={styles.submitButton}>
+          登録
+        </Button>
       </div>
     </div>
   );

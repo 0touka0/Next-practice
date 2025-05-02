@@ -38,7 +38,7 @@ export default function Login() {
       // ログインリクエスト
       await axios.post("/api/login", { email, password }, { withCredentials: true });
 
-      window.location.href = "/"; // トップページにリダイレクト
+      window.location.href = "/admin"; // トップページにリダイレクト
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 422) {
@@ -60,27 +60,39 @@ export default function Login() {
       {errors.general && <div className={styles.errorMessage}>{errors.general}</div>}
 
       <div className={styles.formGroup}>
-        <Input
-          id="email"
-          label="メールアドレス"
-          type="email"
-          value={email}
-          placeholder="例: test@example.com"
-          onChange={handleEmailChange}
-          error={errors.email?.[0]}
-        />
+        <div className={styles.formField}>
+          <label htmlFor="email" className={styles.label}>
+            メールアドレス
+          </label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={email}
+            placeholder="例: test@example.com"
+            onChange={handleEmailChange}
+          />
+          <div className="errorMessage">{errors.email && errors.email[0]}</div>
+        </div>
 
-        <Input
-          id="password"
-          label="パスワード"
-          type="password"
-          value={password}
-          placeholder="例: coachtech1106"
-          onChange={handlePasswordChange}
-          error={errors.password?.[0]}
-        />
+        <div className={styles.formField}>
+          <label htmlFor="password" className={styles.label}>
+            パスワード
+          </label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            placeholder="例: coachtech1106"
+            onChange={handlePasswordChange}
+          />
+          <div className="errorMessage">{errors.password && errors.password[0]}</div>
+        </div>
 
-        <Button onClick={handleSubmit}>ログイン</Button>
+        <Button onClick={handleSubmit} variant="primary" size="large" display="block" className={styles.loginButton}>
+          ログイン
+        </Button>
       </div>
     </div>
   );
