@@ -1,21 +1,16 @@
-import { InputType } from "../../types/input";
+import { InputProps } from "../../types/input";
 import styles from "./Input.module.css";
 
-export default function Input({ id, label, type, value, placeholder, onChange, error }: InputType) {
+export default function Input({ id, type, value, placeholder, onChange, name }: InputProps) {
   return (
-    <div className={styles.inputGroup}>
-      <label htmlFor={id} className={styles.label}>
-        {label}
-      </label>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        className={`${styles.input} ${error ? styles.error : ""}`}
-      />
-      <div className={styles.errorMessage}>{error && <span>{error}</span>}</div>
-    </div>
+    <input
+      id={id}
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className={styles.input}
+    />
   );
 }

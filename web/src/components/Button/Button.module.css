@@ -1,11 +1,103 @@
+/* 基本ボタンスタイル */
 .button {
-	display: block;
-  width: 120px;
-  height: 48px;
-  padding: 10px 20px;
-	margin: 40px auto;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Display variants */
+.display_inline {
+  display: inline;
+}
+
+.display_block {
+  display: block;
+}
+
+.display_flex {
+  display: flex;
+}
+
+.display_inline-flex {
+  display: inline-flex;
+}
+
+/* Variants */
+.button.variant_primary {
   background: #82756a;
-  font-size: 20px;
-  line-height: 26px;
   color: #ffffff;
+}
+
+.button.variant_primary:hover:not(:disabled) {
+  background: #6a5f56;
+}
+
+.button.variant_secondary {
+  background-color: #d9c6b5;
+  color: white;
+}
+
+.button.variant_secondary:hover:not(:disabled) {
+  background: #bb9d82;
+}
+
+.button.variant_export {
+  background: rgba(225, 219, 214, 0.6);
+  color: #82756a;
+}
+
+.button.variant_export:hover:not(:disabled) {
+  background: rgba(185, 174, 166, 0.8);
+}
+
+.button.variant_pagination {
+  background: #ffffff;
+  color: #9a8b82;
+}
+
+.button.variant_pagination:hover:not(:disabled) {
+  background: #dddddd;
+}
+
+.button.variant_detail {
+  border: 1px solid #D9C6B5;
+  background: #F4F4F4;
+  color: #D9C6B5;
+}
+
+.button.variant_detail:hover:not(:disabled) {
+  background: #F4F4F4;
+}
+
+.button.variant_close {
+  background: #F4F4F4;
+  color: #333;
+}
+
+.button.variant_close:hover:not(:disabled) {
+  background: #E0DFDE;
+}
+
+/* Sizes */
+.button.size_small {
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.button.size_medium {
+  padding: 0 12px;
+  font-size: 18px;
+}
+
+.button.size_large {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 20px;
+}
+
+/* Disabled state */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

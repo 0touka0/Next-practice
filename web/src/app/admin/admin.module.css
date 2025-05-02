@@ -1,0 +1,258 @@
+.siteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.siteTitle {
+  font-size: 24px;
+  color: #8b7e75;
+  font-weight: normal;
+  margin: 0;
+}
+
+.logoutBtn {
+  padding: 5px 10px;
+  background-color: transparent;
+  color: #8b7e75;
+  border: 1px solid #8b7e75;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+  background-color: #8b7e75;
+  color: white;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 10px;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  width: 110px;
+  margin: 0 auto 30px;
+  text-align: center;
+  font-size: 35px;
+  font-weight: normal;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 50px;
+  margin-bottom: 30px;
+}
+
+.searchContainer input,
+.searchContainer select {
+  height: 50px;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 16px;
+  color: #8b7969;
+}
+
+.searchContainer input[type="text"] {
+  width: 350px;
+}
+
+.searchContainer select[name="gender"] {
+  width: 100px;
+  background-color: #f4f4f4;
+}
+.searchContainer select[name="category"] {
+  width: 220px;
+  background-color: #f4f4f4;
+}
+
+.searchContainer input[type="date"] {
+  width: 150px;
+  background-color: #f4f4f4;
+}
+
+.searchBtn,
+.resetBtn {
+  width: 100px;
+  height: 50px;
+}
+
+.exportContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.exportBtn {
+  width: 150px;
+  height: 40px;
+}
+
+.pagination {
+  display: flex;
+  gap: 0;
+  border-radius: 8px;
+}
+
+/* ページネーションボタン用のスタイル - Buttonコンポーネントに適用 */
+.paginationBtn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #E0DFDE;
+  color: #82756a;
+}
+
+.paginationBtn:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.paginationBtn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.currentPage {
+  background-color: #82756a;
+  color: white;
+}
+
+.tableContainer {
+  width: 100%;
+  border: 1px solid #E0DFDE;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  height: 60px;
+  border-bottom: 1px solid #E0DFDE;
+  font-size: 20px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #8b7969;
+  color: #fff;
+}
+
+.table td {
+  height: 70px;
+}
+
+.table th:first-child,
+.table td:first-child {
+  width: 200px;
+  padding-left: 45px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  width: 150px;
+  padding-left: 45px;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+  width: 350px;
+  padding-left: 40px;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+  padding-left: 35px;
+}
+
+.table td:last-child {
+  text-align: center;
+  width: 120px;
+}
+
+.detailBtn {
+  width: 80px;
+  height: 40px;
+}
+
+.table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* モーダル閉じるボタン用のスタイル - Buttonコンポーネントに適用 */
+.modalCloseBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  padding: 0;
+  min-width: auto;
+  width: auto;
+  height: auto;
+}
+
+.modalContent h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333;
+  font-weight: normal;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.inquiryDetail {
+  margin-top: 15px;
+}
+
+.inquiryDetail p {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.inquiryDetail strong {
+  font-weight: bold;
+  margin-right: 8px;
+}
