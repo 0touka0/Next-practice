@@ -71,13 +71,19 @@
 }
 
 .button.variant_close {
-  background: #F4F4F4;
-  color: #333;
+  color: #8B7969;
+  background: #fff;
 }
 
 .button.variant_close:hover:not(:disabled) {
   background: #E0DFDE;
 }
+
+.button.variant_delete {
+  background: #BA370D;
+  color: #fff;
+}
+
 
 /* Sizes */
 .button.size_small {

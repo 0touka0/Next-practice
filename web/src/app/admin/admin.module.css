@@ -117,7 +117,7 @@
   width: 30px;
   height: 30px;
   padding: 0;
-  border: 1px solid #E0DFDE;
+  border: 1px solid #e0dfde;
   color: #82756a;
 }
 
@@ -135,7 +135,7 @@
 
 .tableContainer {
   width: 100%;
-  border: 1px solid #E0DFDE;
+  border: 1px solid #e0dfde;
 }
 
 .table {
@@ -146,7 +146,7 @@
 .table th,
 .table td {
   height: 60px;
-  border-bottom: 1px solid #E0DFDE;
+  border-bottom: 1px solid #e0dfde;
   font-size: 20px;
   text-align: left;
 }
@@ -203,7 +203,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -211,48 +210,58 @@
 }
 
 .modalContent {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 800px;
+  height: 860px;
+  padding: 80px;
+  border: 1px solid #8b7969;
+  background-color: #fff;
+  box-shadow: 4px 4px 4px rgba(139,121,105, 0.25);
 }
 
 /* モーダル閉じるボタン用のスタイル - Buttonコンポーネントに適用 */
 .modalCloseBtn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 24px;
-  padding: 0;
-  min-width: auto;
-  width: auto;
-  height: auto;
-}
-
-.modalContent h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 18px;
-  color: #333;
-  font-weight: normal;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  top: 30px;
+  right: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #8b7969;
+  border-radius: 50%;
+  font-weight: bold;
 }
 
 .inquiryDetail {
-  margin-top: 15px;
+  margin-top: 30px;
 }
 
 .inquiryDetail p {
-  margin-bottom: 12px;
+  display: flex;
+  width: 650px;
+  height: 40px;
+  padding: 8px 0;
+  margin-bottom: 20px;
   line-height: 1.5;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .inquiryDetail strong {
+  flex-shrink: 0;
+  margin-right: 50px;
+  width: 180px;
   font-weight: bold;
-  margin-right: 8px;
+}
+
+.buttonContainer {
+  width: 80px;
+  height: 40px;
+  margin: 170px auto 0;
+}
+
+.deleteBtn {
+  width: 100%;
+  height: 100%;
 }

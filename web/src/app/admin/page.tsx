@@ -197,38 +197,59 @@ export default function Admin() {
             <div className={styles.modalContent}>
               <Button
                 onClick={() => setSelectedInquiry(null)}
-                variant="primary"
-                size="small"
+                variant="close"
+                size="medium"
                 className={styles.modalCloseBtn}
               >
                 ×
               </Button>
-              <h3>お問い合わせ詳細</h3>
               {currentItems
                 .filter((item) => item.id === selectedInquiry)
                 .map((item) => (
                   <div key={item.id} className={styles.inquiryDetail}>
                     <p>
-                      <strong>お名前:</strong> {item.last_name} {item.first_name}
+                      <strong>お名前</strong> {item.last_name} {item.first_name}
                     </p>
                     <p>
-                      <strong>性別:</strong> {item.gender === 1 ? "男性" : item.gender === 2 ? "女性" : "その他"}
+                      <strong>性別</strong> {item.gender === 1 ? "男性" : item.gender === 2 ? "女性" : "その他"}
                     </p>
                     <p>
-                      <strong>メールアドレス:</strong> {item.email}
+                      <strong>メールアドレス</strong> {item.email}
                     </p>
                     <p>
-                      <strong>電話番号:</strong> {item.tell}
+                      <strong>電話番号</strong> {item.tell}
                     </p>
                     <p>
-                      <strong>住所:</strong> {item.address} {item.building}
+                      <strong>住所</strong> {item.address}
                     </p>
                     <p>
-                      <strong>お問い合わせの種類:</strong> {item.category_id === 1 ? "お問い合わせ" : "お申し込み"}
+                      <strong>建物名</strong> {item.building}
                     </p>
                     <p>
-                      <strong>内容:</strong> {item.detail}
+                      <strong>お問い合わせの種類</strong>
+                      {item.category_id === 1
+                        ? "商品のお届けについて"
+                        : item.category_id === 2
+                        ? "商品の交換について"
+                        : item.category_id === 3
+                        ? "商品トラブル"
+                        : item.category_id === 4
+                        ? "ショップへのお問い合わせ"
+                        : "その他"}
                     </p>
+                    <p>
+                      <strong>お問い合わせ内容</strong> {item.detail}
+                    </p>
+                    <div className={styles.buttonContainer}>
+                      <Button
+                        onClick={() => setSelectedInquiry(null)}
+                        variant="delete"
+                        size="medium"
+                        className={styles.deleteBtn}
+                      >
+                        削除
+                      </Button>
+                    </div>
                   </div>
                 ))}
             </div>
