@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Button.module.css";
 
-type ButtonVariant = "primary" | "secondary" | "export" | "pagination" | "detail" | "close";
+type ButtonVariant = "primary" | "secondary" | "export" | "pagination" | "detail" | "close" | "delete";
 type ButtonSize = "small" | "medium" | "large";
 type ButtonDisplay = "inline" | "block" | "inline-flex" | "flex";
 
