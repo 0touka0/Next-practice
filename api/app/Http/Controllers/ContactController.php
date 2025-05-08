@@ -12,4 +12,11 @@ class ContactController extends Controller
         $contacts = Contact::all();
         return response()->json($contacts);
     }
+
+    public function destroy($id)
+    {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+        return response()->json(['message' => 'お問い合わせを削除しました'], 200);
+    }
 }

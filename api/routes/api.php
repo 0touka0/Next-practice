@@ -37,3 +37,4 @@ Route::post('/logout', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/contacts', [ContactController::class, 'index']);
+Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);

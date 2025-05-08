@@ -1,28 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./admin.module.css";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { usePagination } from "@/hooks/usePagination";
+import axios from "axios";
+import { Contact } from "@/types/contact";
 
 export default function Admin() {
-  const { searchForm, handleChange, filteredData, handleSearch, resetForm } = useSearchForm();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const { searchForm, handleChange, filteredData, handleSearch, resetForm } = useSearchForm(contacts);
   const { currentPage, totalPages, currentItems, handlePageChange, resetPage } = usePagination({
     data: filteredData,
   });
   const [selectedInquiry, setSelectedInquiry] = useState<null | number>(null);
 
+  // データ取得
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("/api/contacts");
+      setContacts(res.data);
+      handleSearch(res.data);
+    } catch (error) {
+      console.error("エラーが発生しました:", error);
+    }
+  };
+
+  // 初回マウント時にデータを取得
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // 削除機能
+  const handleDelete = async (id: number) => {
+    if (!window.confirm("このお問い合わせを削除してもよろしいですか？")) {
+      return;
+    }
+
+    try {
+      await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
+      const response = await axios.delete(`/api/contacts/${id}`, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        alert("お問い合わせを削除しました");
+        setSelectedInquiry(null);
+        // データを再取得
+        await fetchData();
+        // ページをリセット
+        resetPage();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("削除に失敗しました");
+    }
+  };
+
   // 検索とページリセットを連動
   const handleSearchWithReset = () => {
-    handleSearch();
+    handleSearch(contacts);
     resetPage();
   };
 
   // リセットとページリセットを連動
   const handleResetWithPage = () => {
-    resetForm();
+    resetForm(contacts);
     resetPage();
   };
 
@@ -242,7 +287,7 @@ export default function Admin() {
                     </p>
                     <div className={styles.buttonContainer}>
                       <Button
-                        onClick={() => setSelectedInquiry(null)}
+                        onClick={() => handleDelete(item.id)}
                         variant="delete"
                         size="medium"
                         className={styles.deleteBtn}
