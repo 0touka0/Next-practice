@@ -10,6 +10,8 @@ export default function Header() {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const hideLogin = pathname.startsWith("/contact");
+
   useEffect(() => {
     // サーバーに認証状態を確認するリクエストを送信
     axios
@@ -62,7 +64,9 @@ export default function Header() {
   return (
     <header className="header">
       <h1 className="header-title">FashionablyLate</h1>
-      <div className="header-links">{renderLink()}</div>
+      {!hideLogin && (
+        <div className="header-links">{renderLink()}</div>
+      )}
     </header>
   );
 }
