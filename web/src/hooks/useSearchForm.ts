@@ -1,33 +1,23 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
+import { useState, ChangeEvent } from "react";
 import { Contact } from "@/types/contact";
 
-export const useSearchForm = () => {
-  const [searchForm, setSearchForm] = useState({
+type SearchFormState = {
+  keyword: string;
+  gender: string;
+  category: string;
+  date: string;
+};
+
+export const useSearchForm = (initialData: Contact[]) => {
+  const [searchForm, setSearchForm] = useState<SearchFormState>({
     keyword: "",
     gender: "",
     category: "",
     date: "",
   });
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [filteredData, setFilteredData] = useState<Contact[]>([]);
-
-  // データ取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/contacts");
-        setContacts(res.data);
-        setFilteredData(res.data);
-      } catch (error) {
-        console.error("エラーが発生しました:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const [filteredData, setFilteredData] = useState<Contact[]>(initialData);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -37,9 +27,8 @@ export const useSearchForm = () => {
     }));
   };
 
-  // 検索実行
-  const handleSearch = () => {
-    const filtered = contacts.filter((item) => {
+  const handleSearch = (data: Contact[]) => {
+    const filtered = data.filter((item) => {
       const fullName = `${item.last_name}${item.first_name}`;
       const keywordMatch =
         !searchForm.keyword || fullName.includes(searchForm.keyword) || item.email.includes(searchForm.keyword);
@@ -51,25 +40,23 @@ export const useSearchForm = () => {
     });
 
     setFilteredData(filtered);
-    return filtered; // 検索結果を返す
+    return filtered;
   };
 
-  // リセット処理
-  const resetForm = () => {
+  const resetForm = (data: Contact[]) => {
     setSearchForm({
       keyword: "",
       gender: "",
       category: "",
       date: "",
     });
-    setFilteredData(contacts);
-    return contacts; // リセット後のデータを返す
+    setFilteredData(data);
+    return data;
   };
 
   return {
     searchForm,
     handleChange,
-    contacts,
     filteredData,
     handleSearch,
     resetForm,
