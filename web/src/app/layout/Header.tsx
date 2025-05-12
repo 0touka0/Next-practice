@@ -10,7 +10,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const hideLogin = pathname.startsWith("/contact");
+  const hideLogin = pathname === "/" || pathname === "/contact/confirm";
   const hideHeader = pathname === "/contact/thanks";
 
   useEffect(() => {
