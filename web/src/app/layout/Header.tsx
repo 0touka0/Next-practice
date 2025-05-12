@@ -11,6 +11,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const hideLogin = pathname.startsWith("/contact");
+  const hideHeader = pathname === "/contact/thanks";
 
   useEffect(() => {
     // サーバーに認証状態を確認するリクエストを送信
@@ -62,11 +63,15 @@ export default function Header() {
   };
 
   return (
-    <header className="header">
-      <h1 className="header-title">FashionablyLate</h1>
-      {!hideLogin && (
-        <div className="header-links">{renderLink()}</div>
-      )}
-    </header>
+    <>
+      {!hideHeader &&
+        <header className="header">
+          <h1 className="header-title">FashionablyLate</h1>
+          {!hideLogin && (
+            <div className="header-links">{renderLink()}</div>
+          )}
+        </header>
+      }
+    </>
   );
 }
