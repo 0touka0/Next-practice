@@ -51,7 +51,7 @@ export default function Confirm() {
       </table>
       <div className={styles.buttonGroup}>
         <Button className={styles.button}>送信</Button>
-        <Link href="/contact/form" className={styles.linkButton}>
+        <Link href="/" className={styles.linkButton}>
           修正
         </Link>
       </div>
