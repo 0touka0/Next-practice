@@ -38,3 +38,6 @@ Route::post('/logout', function (Request $request) {
 
 Route::get('/contacts', [ContactController::class, 'index']);
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+
+Route::post('/contact/temp-store', [ContactController::class, 'tempStore']);
+Route::get('/contact/session-data', [ContactController::class, 'sessionData']);
