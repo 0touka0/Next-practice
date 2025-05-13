@@ -1,29 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import styles from "./form.module.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
+type FormData = {
+  first_name: string;
+  last_name: string;
+  gender: string;
+  email: string;
+  tell_1: string;
+  tell_2: string;
+  tell_3: string;
+  address: string;
+  building: string;
+  category_id: number;
+  detail: string;
+};
+
+const initialFormData: FormData = {
+  first_name: "",
+  last_name: "",
+  gender: "1",
+  email: "",
+  tell_1: "",
+  tell_2: "",
+  tell_3: "",
+  address: "",
+  building: "",
+  category_id: 1,
+  detail: "",
+};
 
 export default function ContactForm() {
   const router = useRouter();
-
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    gender: "1",
-    email: "",
-    tell_1: "",
-    tell_2: "",
-    tell_3: "",
-    address: "",
-    building: "",
-    category_id: "",
-    detail: "",
-  });
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,25 +50,33 @@ export default function ContactForm() {
   };
 
   const handleSubmit = async () => {
-    // 電話番号を結合して、tell_1, tell_2, tell_3を削除
-    const { tell_1, tell_2, tell_3, ...rest } = formData;
-    const tell_concat = `${tell_1}${tell_2}${tell_3}`;
+    try {
+      setIsLoading(true);
+      setError(null);
 
-    // セッション認証を使っているのでwithCredentialsをtrueにして送信
-    const response = await axios.post(
-      "/api/contact/temp-store",
-      { ...rest, tell: tell_concat },
-      { withCredentials: true }
-    );
+      const { tell_1, tell_2, tell_3, ...rest } = formData;
+      const tell_concat = `${tell_1}${tell_2}${tell_3}`;
 
-    // 送信成功時、確認画面 /contact/confirm に遷移
-    if (response.status === 200) {
-      router.push("/contact/confirm");
+      const response = await axios.post(
+        "/api/contact/temp-store",
+        { ...rest, tell: tell_concat },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        router.push("/contact/confirm");
+      }
+    } catch (error) {
+      setError("送信に失敗しました。もう一度お試しください。");
+      console.error("送信エラー:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const sessionData = async () => {
+  const fetchSessionData = async () => {
     try {
+      setError(null);
       const response = await axios.get("/api/contact/session-data", {
         withCredentials: true,
         headers: {
@@ -60,7 +84,6 @@ export default function ContactForm() {
         },
       });
 
-      // 電話番号を分割
       if (response.data?.tell) {
         const tell = response.data.tell;
         response.data.tell_1 = tell.substring(0, 3);
@@ -68,35 +91,33 @@ export default function ContactForm() {
         response.data.tell_3 = tell.substring(7);
         delete response.data.tell;
       }
-      return response.data;
+
+      setFormData((prev) => ({
+        ...prev,
+        ...response.data,
+      }));
     } catch (error) {
-      console.error("セッションデータの取得に失敗しました:", error);
-      return {};
+      setError("データの取得に失敗しました。");
+      console.error("セッションデータ取得エラー:", error);
     }
   };
 
-  // sessionDataを実行
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await sessionData();
-        setFormData((prev) => ({
-          ...prev,
-          ...data,
-        }));
-      } catch (error) {
-        console.error("データの取得に失敗しました:", error);
-      }
-    };
-
-    fetchData();
+    fetchSessionData();
   }, []);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Contact</h2>
+      {error && <div className={styles.error}>{error}</div>}
       <div className={styles.formContainer}>
-        <form className={styles.form}>
+        <form
+          className={styles.form}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           <div className={styles.formGroup}>
             <label htmlFor="first_name" className={styles.label}>
               お名前
@@ -109,6 +130,7 @@ export default function ContactForm() {
                 value={formData.first_name}
                 placeholder="例：山田"
                 onChange={handleChange}
+                required
               />
               <Input
                 type="text"
@@ -117,6 +139,7 @@ export default function ContactForm() {
                 value={formData.last_name}
                 placeholder="例：太郎"
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -167,6 +190,7 @@ export default function ContactForm() {
               value={formData.email}
               placeholder="例：test@example.com"
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -182,6 +206,7 @@ export default function ContactForm() {
                 value={formData.tell_1}
                 placeholder="090"
                 onChange={handleChange}
+                required
               />
               <span>-</span>
               <Input
@@ -191,6 +216,7 @@ export default function ContactForm() {
                 value={formData.tell_2}
                 placeholder="1234"
                 onChange={handleChange}
+                required
               />
               <span>-</span>
               <Input
@@ -200,6 +226,7 @@ export default function ContactForm() {
                 value={formData.tell_3}
                 placeholder="5678"
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -215,6 +242,7 @@ export default function ContactForm() {
               value={formData.address}
               placeholder="例：東京都渋谷区千駄ヶ谷1-2-3"
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -243,6 +271,7 @@ export default function ContactForm() {
                 value={formData.category_id}
                 onChange={handleChange}
                 className={styles.select}
+                required
               >
                 <option value="">選択してください</option>
                 <option value="1">商品のお届けについて</option>
@@ -265,14 +294,16 @@ export default function ContactForm() {
               onChange={handleChange}
               className={styles.textarea}
               placeholder="お問い合わせ内容をご記載ください"
+              required
             />
           </div>
+
+          <div className={styles.buttonContainer}>
+            <Button type="submit" variant="primary" size="medium" className={styles.submitButton} disabled={isLoading}>
+              {isLoading ? "送信中..." : "確認画面へ"}
+            </Button>
+          </div>
         </form>
-        <div className={styles.buttonContainer}>
-          <Button type="submit" variant="primary" size="medium" className={styles.submitButton} onClick={handleSubmit}>
-            確認画面へ
-          </Button>
-        </div>
       </div>
     </div>
   );
