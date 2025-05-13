@@ -4,8 +4,13 @@ import { useState } from "react";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import styles from "./form.module.css";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ContactForm() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -27,6 +32,65 @@ export default function ContactForm() {
       [name]: value,
     }));
   };
+
+  const handleSubmit = async () => {
+    // 電話番号を結合して、tell_1, tell_2, tell_3を削除
+    const { tell_1, tell_2, tell_3, ...rest } = formData;
+    const tell_concat = `${tell_1}${tell_2}${tell_3}`;
+
+    // セッション認証を使っているのでwithCredentialsをtrueにして送信
+    const response = await axios.post(
+      "/api/contact/temp-store",
+      { ...rest, tell: tell_concat },
+      { withCredentials: true }
+    );
+
+    // 送信成功時、確認画面 /contact/confirm に遷移
+    if (response.status === 200) {
+      router.push("/contact/confirm");
+    }
+  };
+
+  const sessionData = async () => {
+    try {
+      const response = await axios.get("/api/contact/session-data", {
+        withCredentials: true,
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      // 電話番号を分割
+      if (response.data?.tell) {
+        const tell = response.data.tell;
+        response.data.tell_1 = tell.substring(0, 3);
+        response.data.tell_2 = tell.substring(3, 7);
+        response.data.tell_3 = tell.substring(7);
+        delete response.data.tell;
+      }
+      return response.data;
+    } catch (error) {
+      console.error("セッションデータの取得に失敗しました:", error);
+      return {};
+    }
+  };
+
+  // sessionDataを実行
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await sessionData();
+        setFormData((prev) => ({
+          ...prev,
+          ...data,
+        }));
+      } catch (error) {
+        console.error("データの取得に失敗しました:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -205,7 +269,7 @@ export default function ContactForm() {
           </div>
         </form>
         <div className={styles.buttonContainer}>
-          <Button type="submit" variant="primary" size="medium" className={styles.submitButton}>
+          <Button type="submit" variant="primary" size="medium" className={styles.submitButton} onClick={handleSubmit}>
             確認画面へ
           </Button>
         </div>

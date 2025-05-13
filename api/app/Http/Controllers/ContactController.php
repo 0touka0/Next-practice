@@ -19,4 +19,17 @@ class ContactController extends Controller
         $contact->delete();
         return response()->json(['message' => 'お問い合わせを削除しました'], 200);
     }
+
+    public function tempStore(Request $request)
+    {
+        // requestのデータをセッションに保存して、フロントにレスポンスを返す
+        $request->session()->put('contact', $request->all());
+        return response()->json(['message' => 'お問い合わせを確認しました'], 200);
+    }
+
+    public function sessionData(Request $request)
+    {
+        $contact = $request->session()->get('contact');
+        return response()->json($contact);
+    }
 }
