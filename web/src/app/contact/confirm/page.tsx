@@ -5,7 +5,7 @@ import Link from "next/link";
 import styles from "./confirm.module.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { ConfirmData } from "@/types/contact";
+import { ConfirmData } from "@/types/contactForm";
 import { useRouter } from "next/navigation";
 
 export default function Confirm() {

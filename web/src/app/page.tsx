@@ -6,7 +6,7 @@ import Button from "@/components/Button/Button";
 import styles from "./form.module.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { FormData } from "@/types/contact";
+import { FormData } from "@/types/contactForm";
 
 const initialFormData: FormData = {
   first_name: "",
