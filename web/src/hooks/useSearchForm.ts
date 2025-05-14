@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Contact } from "@/types/contact";
+import { Contact } from "@/types/contactForm";
 
 type SearchFormState = {
   keyword: string;

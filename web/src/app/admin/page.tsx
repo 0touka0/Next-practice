@@ -7,10 +7,10 @@ import Button from "@/components/Button/Button";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { usePagination } from "@/hooks/usePagination";
 import axios from "axios";
-import { Contact } from "@/types/contact";
+import { ContactAdmin } from "@/types/contactAdmin";
 
 export default function Admin() {
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<ContactAdmin[]>([]);
   const { searchForm, handleChange, filteredData, handleSearch, resetForm } = useSearchForm(contacts);
   const { currentPage, totalPages, currentItems, handlePageChange, resetPage } = usePagination({
     data: filteredData,
