@@ -6,20 +6,7 @@ import Button from "@/components/Button/Button";
 import styles from "./form.module.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
-type FormData = {
-  first_name: string;
-  last_name: string;
-  gender: string;
-  email: string;
-  tell_1: string;
-  tell_2: string;
-  tell_3: string;
-  address: string;
-  building: string;
-  category_id: number;
-  detail: string;
-};
+import { FormData } from "@/types/contact";
 
 const initialFormData: FormData = {
   first_name: "",

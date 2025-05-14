@@ -22,7 +22,6 @@ class ContactController extends Controller
 
     public function tempStore(Request $request)
     {
-        // requestのデータをセッションに保存して、フロントにレスポンスを返す
         $request->session()->put('contact', $request->all());
         return response()->json(['message' => 'お問い合わせを確認しました'], 200);
     }
@@ -31,5 +30,12 @@ class ContactController extends Controller
     {
         $contact = $request->session()->get('contact');
         return response()->json($contact);
+    }
+
+    public function contactStore(Request $request)
+    {
+        $contact = Contact::create($request->all());
+        $request->session()->forget('contact');
+        return response()->json(['message' => 'お問い合わせを受け付けました'], 200);
     }
 }
