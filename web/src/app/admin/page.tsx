@@ -76,6 +76,13 @@ export default function Admin() {
     setSelectedInquiry(id);
   };
 
+  // モーダルを非表示にする
+  const handleModalClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setSelectedInquiry(null);
+    }
+  };
+
   // エクスポート機能
   const handleExport = () => {
     console.log("エクスポート機能が呼び出されました");
@@ -238,7 +245,7 @@ export default function Admin() {
 
         {/* 詳細モーダル */}
         {selectedInquiry && (
-          <div className={styles.modal}>
+          <div className={styles.modal} onClick={handleModalClick}>
             <div className={styles.modalContent}>
               <Button
                 onClick={() => setSelectedInquiry(null)}
@@ -253,7 +260,7 @@ export default function Admin() {
                 .map((item) => (
                   <div key={item.id} className={styles.inquiryDetail}>
                     <p>
-                      <strong>お名前</strong> {item.last_name} {item.first_name}
+                      <strong>お名前</strong> {item.first_name} {item.last_name}
                     </p>
                     <p>
                       <strong>性別</strong> {item.gender === 1 ? "男性" : item.gender === 2 ? "女性" : "その他"}
