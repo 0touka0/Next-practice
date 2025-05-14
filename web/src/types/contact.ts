@@ -1,12 +1,23 @@
-export type Contact = {
-  id: number;
-  category_id: number;
+// 共通部分
+export type BaseContact = {
   first_name: string;
   last_name: string;
-  gender: number;
+  gender: string;
   email: string;
-  tell: string;
   address: string;
   building: string;
+  category_id: number;
   detail: string;
+};
+
+// フォーム入力用
+export type FormData = BaseContact & {
+  tell_1: string;
+  tell_2: string;
+  tell_3: string;
+};
+
+// 確認画面用
+export type ConfirmData = BaseContact & {
+  tell: string;
 };

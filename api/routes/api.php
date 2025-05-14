@@ -32,7 +32,6 @@ Route::post('/logout', function (Request $request) {
     $request->session()->invalidate();       // セッションを無効にする
     $request->session()->regenerateToken();  // CSRFトークンを再生成（セキュリティ対策）
 
-    // $request->user()->tokens()->delete();
     return response()->json(['message' => 'ログアウトしました。']);
 })->middleware('auth:sanctum');
 
@@ -41,3 +40,4 @@ Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
 
 Route::post('/contact/temp-store', [ContactController::class, 'tempStore']);
 Route::get('/contact/session-data', [ContactController::class, 'sessionData']);
+Route::post('/contact/contact-store', [ContactController::class, 'contactStore']);

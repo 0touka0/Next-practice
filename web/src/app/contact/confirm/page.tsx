@@ -5,9 +5,12 @@ import Link from "next/link";
 import styles from "./confirm.module.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { ConfirmData } from "@/types/contact";
+import { useRouter } from "next/navigation";
 
 export default function Confirm() {
-  const [confirmData, setConfirmData] = useState({
+  const router = useRouter();
+  const [confirmData, setConfirmData] = useState<ConfirmData>({
     first_name: "",
     last_name: "",
     gender: "",
@@ -15,7 +18,7 @@ export default function Confirm() {
     tell: "",
     address: "",
     building: "",
-    category_id: "",
+    category_id: 0,
     detail: "",
   });
 
@@ -32,6 +35,29 @@ export default function Confirm() {
     };
     fetchData();
   }, []);
+
+  // データを送信する関数
+  const handleSubmit = async () => {
+    try {
+      // 性別を数値型に変換
+      const submitData = {
+        ...confirmData,
+        gender: parseInt(confirmData.gender),
+      };
+
+      const response = await axios.post("/api/contact/contact-store", submitData, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        // 送信成功時の処理
+        router.push("/contact/thanks");
+      }
+    } catch (error) {
+      console.error("送信エラー:", error);
+      alert("送信に失敗しました。もう一度お試しください。");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -69,7 +95,17 @@ export default function Confirm() {
           </tr>
           <tr className={styles.tableRow}>
             <th className={styles.tableHeader}>お問い合わせの種類</th>
-            <td className={styles.tableData}>{confirmData.category_id === "1" ? "商品のお届けについて" : confirmData.category_id === "2" ? "商品の交換について" : confirmData.category_id === "3" ? "商品トラブル" : confirmData.category_id === "4" ? "ショップへのお問い合わせ" : "その他"}</td>
+            <td className={styles.tableData}>
+              {confirmData.category_id === 1
+                ? "商品のお届けについて"
+                : confirmData.category_id === 2
+                ? "商品の交換について"
+                : confirmData.category_id === 3
+                ? "商品トラブル"
+                : confirmData.category_id === 4
+                ? "ショップへのお問い合わせ"
+                : "その他"}
+            </td>
           </tr>
           <tr className={styles.tableRow}>
             <th className={styles.tableHeader}>お問い合わせ内容</th>
@@ -78,7 +114,9 @@ export default function Confirm() {
         </tbody>
       </table>
       <div className={styles.buttonGroup}>
-        <Button className={styles.button}>送信</Button>
+        <Button className={styles.button} onClick={handleSubmit}>
+          送信
+        </Button>
         <Link href="/" className={styles.linkButton}>
           修正
         </Link>
