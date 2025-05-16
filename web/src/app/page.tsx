@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
-import styles from "./form.module.css";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import { FormData } from "@/types/contactForm";
+import styles from "./form.module.css";
 
 const initialFormData: FormData = {
   first_name: "",
@@ -51,7 +51,7 @@ export default function ContactForm() {
       );
 
       if (response.status === 200) {
-        router.push("/contact/confirm");
+        router.push("/confirm");
       }
     } catch (error) {
       setError("送信に失敗しました。もう一度お試しください。");

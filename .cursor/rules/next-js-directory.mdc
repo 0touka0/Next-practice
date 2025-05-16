@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+<!-- Next.jsの基本のディレクトリ構成 -->
+src
+|
++-- app        # Routing files（Next.jsが標準で提供するファイル）
+|
++-- components # 横断的（ドメインに依存しない）なUIコンポーネント
+|
++-- features   # 特定のドメイン・機能に関係するコンポーネント
+|
++-- hooks      # ドメインに依存しない、横断的なhooks
+|
++-- providers  # アプリケーションプロバイダー
+|
++-- utils      # 横断的な汎用関数
+|
++-- constants  # 横断的な定数
+|
++-- types      # 横断的な型定義
+|
++-- styles     # スタイリング（css）に関するファイル
+|
++-- lib        # ライブラリの処理や標準処理を共通化したコード
+|
++-- tests      # 自動テスト関連

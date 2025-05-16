@@ -1,6 +1,6 @@
-import styles from "./thanks.module.css";
 import Link from "next/link";
 import Button from "@/components/Button/Button";
+import styles from "./thanks.module.css";
 
 export default function Thanks() {
   return (
