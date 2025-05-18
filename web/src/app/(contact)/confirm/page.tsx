@@ -1,12 +1,12 @@
 "use client";
 
-import Button from "@/components/Button/Button";
-import Link from "next/link";
-import styles from "./confirm.module.css";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { ConfirmData } from "@/types/contactForm";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import axios from "axios";
+import Button from "@/components/Button/Button";
+import { ConfirmData } from "@/types/contactForm";
+import styles from "./confirm.module.css";
 
 export default function Confirm() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function Confirm() {
 
       if (response.status === 200) {
         // 送信成功時の処理
-        router.push("/contact/thanks");
+        router.push("/thanks");
       }
     } catch (error) {
       console.error("送信エラー:", error);

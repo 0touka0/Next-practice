@@ -1,17 +1,17 @@
 "use client";
 
-import "./header.css";
-import Link from "next/link.js";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link.js";
 import axios from "axios";
+import "./header.css";
 
 export default function Header() {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const hideLogin = pathname === "/" || pathname === "/contact/confirm";
-  const hideHeader = pathname === "/contact/thanks";
+  const hideLogin = pathname === "/" || pathname === "/confirm";
+  const hideHeader = pathname === "/thanks";
 
   useEffect(() => {
     // サーバーに認証状態を確認するリクエストを送信
@@ -64,14 +64,12 @@ export default function Header() {
 
   return (
     <>
-      {!hideHeader &&
+      {!hideHeader && (
         <header className="header">
           <h1 className="header-title">FashionablyLate</h1>
-          {!hideLogin && (
-            <div className="header-links">{renderLink()}</div>
-          )}
+          {!hideLogin && <div className="header-links">{renderLink()}</div>}
         </header>
-      }
+      )}
     </>
   );
 }
