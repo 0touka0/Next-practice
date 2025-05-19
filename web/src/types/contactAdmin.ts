@@ -1,7 +1,8 @@
 export type ContactAdmin = {
+  id: number;
   first_name: string;
   last_name: string;
-  gender: string;
+  gender: number;
   email: string;
   tell: string;
   address: string;

@@ -6,27 +6,33 @@ import axios from "axios";
 import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import { FormData } from "@/types/contactForm";
+import { useCategories } from "@/hooks/useCategories";
 import styles from "./form.module.css";
 
 const initialFormData: FormData = {
   first_name: "",
   last_name: "",
-  gender: "1",
+  gender: 1,
   email: "",
   tell_1: "",
   tell_2: "",
   tell_3: "",
   address: "",
   building: "",
-  category_id: 1,
+  category_id: 0,
   detail: "",
+};
+
+type ValidationErrors = {
+  [key: string]: string[];
 };
 
 export default function ContactForm() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const { categories } = useCategories();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,27 +40,29 @@ export default function ContactForm() {
       ...prev,
       [name]: value,
     }));
+    // 入力時に該当フィールドのエラーをクリア
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       setIsLoading(true);
-      setError(null);
+      setErrors({});
 
-      const { tell_1, tell_2, tell_3, ...rest } = formData;
-      const tell_concat = `${tell_1}${tell_2}${tell_3}`;
+      const response = await axios.post("/api/contact/temp-store", { ...formData }, { withCredentials: true });
 
-      const response = await axios.post(
-        "/api/contact/temp-store",
-        { ...rest, tell: tell_concat },
-        { withCredentials: true }
-      );
-
-      if (response.status === 200) {
-        router.push("/confirm");
-      }
+      router.push("/confirm");
     } catch (error) {
-      setError("送信に失敗しました。もう一度お試しください。");
+      if (axios.isAxiosError(error)) {
+        setErrors(error.response?.data.errors);
+      }
       console.error("送信エラー:", error);
     } finally {
       setIsLoading(false);
@@ -63,7 +71,6 @@ export default function ContactForm() {
 
   const fetchSessionData = async () => {
     try {
-      setError(null);
       const response = await axios.get("/api/contact/session-data", {
         withCredentials: true,
         headers: {
@@ -84,7 +91,6 @@ export default function ContactForm() {
         ...response.data,
       }));
     } catch (error) {
-      setError("データの取得に失敗しました。");
       console.error("セッションデータ取得エラー:", error);
     }
   };
@@ -96,16 +102,9 @@ export default function ContactForm() {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Contact</h2>
-      {error && <div className={styles.error}>{error}</div>}
-      <div className={styles.formContainer}>
-        <form
-          className={styles.form}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <div className={styles.formGroup}>
+      <form className={styles.form} onSubmit={handleSubmit} noValidate>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="first_name" className={styles.label}>
               お名前
             </label>
@@ -130,8 +129,13 @@ export default function ContactForm() {
               />
             </div>
           </div>
+          <p className={styles.errorMessage}>
+            {errors.first_name ? errors.first_name[0] : errors.last_name ? errors.last_name[0] : ""}
+          </p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="gender-male" className={styles.label}>
               性別
             </label>
@@ -140,33 +144,39 @@ export default function ContactForm() {
                 type="radio"
                 id="gender-male"
                 name="gender"
-                value="1"
+                value={1}
                 onChange={handleChange}
-                checked={formData.gender === "1"}
+                checked={formData.gender === 1}
+                required
               />
               <label htmlFor="gender-male">男性</label>
               <Input
                 type="radio"
                 id="gender-female"
                 name="gender"
-                value="2"
+                value={2}
                 onChange={handleChange}
-                checked={formData.gender === "2"}
+                checked={formData.gender === 2}
+                required
               />
               <label htmlFor="gender-female">女性</label>
               <Input
                 type="radio"
                 id="gender-other"
                 name="gender"
-                value="3"
+                value={3}
                 onChange={handleChange}
-                checked={formData.gender === "3"}
+                checked={formData.gender === 3}
+                required
               />
               <label htmlFor="gender-other">その他</label>
             </div>
           </div>
+          <p className={styles.errorMessage}>{errors.gender ? errors.gender[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="email" className={styles.label}>
               メールアドレス
             </label>
@@ -180,8 +190,11 @@ export default function ContactForm() {
               required
             />
           </div>
+          <p className={styles.errorMessage}>{errors.email ? errors.email[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="tell_1" className={styles.label}>
               電話番号
             </label>
@@ -217,8 +230,11 @@ export default function ContactForm() {
               />
             </div>
           </div>
+          <p className={styles.errorMessage}>{errors.tell ? errors.tell[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="address" className={styles.label}>
               住所
             </label>
@@ -232,8 +248,11 @@ export default function ContactForm() {
               required
             />
           </div>
+          <p className={styles.errorMessage}>{errors.address ? errors.address[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="building" className={styles.label}>
               建物名
             </label>
@@ -246,8 +265,11 @@ export default function ContactForm() {
               onChange={handleChange}
             />
           </div>
+          <p className={styles.errorMessage}>{errors.building ? errors.building[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="category" className={styles.label}>
               お問い合わせの種類
             </label>
@@ -257,20 +279,23 @@ export default function ContactForm() {
                 name="category_id"
                 value={formData.category_id}
                 onChange={handleChange}
-                className={styles.select}
+                className={`${styles.select} ${formData.category_id ? styles.selected : ""}`}
                 required
               >
                 <option value="">選択してください</option>
-                <option value="1">商品のお届けについて</option>
-                <option value="2">商品の交換について</option>
-                <option value="3">商品トラブル</option>
-                <option value="4">ショップへのお問い合わせ</option>
-                <option value="5">その他</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.content}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
+          <p className={styles.errorMessage}>{errors.category_id ? errors.category_id[0] : ""}</p>
+        </div>
 
-          <div className={styles.formGroup}>
+        <div className={styles.formGroup}>
+          <div className={styles.formGroupContent}>
             <label htmlFor="detail" className={styles.label}>
               お問い合わせ内容
             </label>
@@ -284,14 +309,15 @@ export default function ContactForm() {
               required
             />
           </div>
+          <p className={styles.errorMessage}>{errors.detail ? errors.detail[0] : ""}</p>
+        </div>
 
-          <div className={styles.buttonContainer}>
-            <Button type="submit" variant="primary" size="medium" className={styles.submitButton} disabled={isLoading}>
-              {isLoading ? "送信中..." : "確認画面へ"}
-            </Button>
-          </div>
-        </form>
-      </div>
+        <div className={styles.buttonContainer}>
+          <Button type="submit" variant="primary" size="medium" className={styles.submitButton} disabled={isLoading}>
+            {isLoading ? "送信中..." : "確認画面へ"}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

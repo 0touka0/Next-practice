@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Contact } from "@/types/contactForm";
+import { ContactAdmin } from "@/types/contactAdmin";
 
 type SearchFormState = {
   keyword: string;
@@ -10,14 +10,14 @@ type SearchFormState = {
   date: string;
 };
 
-export const useSearchForm = (initialData: Contact[]) => {
+export const useSearchForm = (initialData: ContactAdmin[]) => {
   const [searchForm, setSearchForm] = useState<SearchFormState>({
     keyword: "",
     gender: "",
     category: "",
     date: "",
   });
-  const [filteredData, setFilteredData] = useState<Contact[]>(initialData);
+  const [filteredData, setFilteredData] = useState<ContactAdmin[]>(initialData);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -27,7 +27,7 @@ export const useSearchForm = (initialData: Contact[]) => {
     }));
   };
 
-  const handleSearch = (data: Contact[]) => {
+  const handleSearch = (data: ContactAdmin[]) => {
     const filtered = data.filter((item) => {
       const fullName = `${item.last_name}${item.first_name}`;
       const keywordMatch =
@@ -43,7 +43,7 @@ export const useSearchForm = (initialData: Contact[]) => {
     return filtered;
   };
 
-  const resetForm = (data: Contact[]) => {
+  const resetForm = (data: ContactAdmin[]) => {
     setSearchForm({
       keyword: "",
       gender: "",

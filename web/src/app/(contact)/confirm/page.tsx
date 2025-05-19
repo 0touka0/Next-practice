@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import Button from "@/components/Button/Button";
 import { ConfirmData } from "@/types/contactForm";
+import { useCategories, Category } from "@/hooks/useCategories";
 import styles from "./confirm.module.css";
 
 export default function Confirm() {
@@ -13,7 +14,7 @@ export default function Confirm() {
   const [confirmData, setConfirmData] = useState<ConfirmData>({
     first_name: "",
     last_name: "",
-    gender: "",
+    gender: 0,
     email: "",
     tell: "",
     address: "",
@@ -21,17 +22,26 @@ export default function Confirm() {
     category_id: 0,
     detail: "",
   });
+  const { categories } = useCategories();
+
+  // カテゴリーIDからカテゴリー名を取得する関数
+  const getCategoryNameById = (id: number): string => {
+    const category = categories.find((cat: Category) => cat.id === id);
+    return category ? category.content : "不明なカテゴリー";
+  };
 
   // セッションデータを取得
   const sessionData = async () => {
     const response = await axios.get("/api/contact/session-data", { withCredentials: true });
+    console.log(response.data);
     return response.data;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await sessionData();
-      setConfirmData(data);
+      const tell = data.tell_1 + data.tell_2 + data.tell_3;
+      setConfirmData({ ...data, tell });
     };
     fetchData();
   }, []);
@@ -41,8 +51,7 @@ export default function Confirm() {
     try {
       // 性別を数値型に変換
       const submitData = {
-        ...confirmData,
-        gender: parseInt(confirmData.gender),
+        ...confirmData
       };
 
       const response = await axios.post("/api/contact/contact-store", submitData, {
@@ -74,7 +83,7 @@ export default function Confirm() {
           <tr className={styles.tableRow}>
             <th className={styles.tableHeader}>性別</th>
             <td className={styles.tableData}>
-              {confirmData.gender === "1" ? "男性" : confirmData.gender === "2" ? "女性" : "その他"}
+              {confirmData.gender === 1 ? "男性" : confirmData.gender === 2 ? "女性" : "その他"}
             </td>
           </tr>
           <tr className={styles.tableRow}>
@@ -95,17 +104,7 @@ export default function Confirm() {
           </tr>
           <tr className={styles.tableRow}>
             <th className={styles.tableHeader}>お問い合わせの種類</th>
-            <td className={styles.tableData}>
-              {confirmData.category_id === 1
-                ? "商品のお届けについて"
-                : confirmData.category_id === 2
-                ? "商品の交換について"
-                : confirmData.category_id === 3
-                ? "商品トラブル"
-                : confirmData.category_id === 4
-                ? "ショップへのお問い合わせ"
-                : "その他"}
-            </td>
+            <td className={styles.tableData}>{getCategoryNameById(Number(confirmData.category_id))}</td>
           </tr>
           <tr className={styles.tableRow}>
             <th className={styles.tableHeader}>お問い合わせ内容</th>

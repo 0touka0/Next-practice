@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,7 @@ Route::get('/hello', function () {
 });
 
 Route::post('/register', RegisterController::class);
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', LoginController::class);
 
 Route::get('/auth/check', function (Request $request) {
     $isAuthenticated = Auth::check();
@@ -37,6 +38,9 @@ Route::post('/logout', function (Request $request) {
 
 Route::get('/contacts', [ContactController::class, 'index']);
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+
+// カテゴリー一覧を取得するエンドポイント
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::post('/contact/temp-store', [ContactController::class, 'tempStore']);
 Route::get('/contact/session-data', [ContactController::class, 'sessionData']);

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Contact } from "@/types/contactForm";
+import { ContactAdmin } from "@/types/contactAdmin";
 
 type PaginationProps = {
-  data: Contact[];
+  data: ContactAdmin[];
   itemsPerPage?: number;
 };
 
