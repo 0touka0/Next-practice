@@ -1,7 +1,7 @@
 import { InputProps } from "../../types/input";
 import styles from "./Input.module.css";
 
-export default function Input({ id, type, value, placeholder, onChange, name, checked }: InputProps) {
+export default function Input({ id, type, value, placeholder, onChange, name, checked, required }: InputProps) {
   return (
     <input
       id={id}
@@ -12,6 +12,7 @@ export default function Input({ id, type, value, placeholder, onChange, name, ch
       placeholder={placeholder}
       className={styles.input}
       checked={checked}
+      required={required}
     />
   );
 }

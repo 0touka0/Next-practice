@@ -6,6 +6,7 @@ import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { usePagination } from "@/hooks/usePagination";
+import { useCategories, Category } from "@/hooks/useCategories";
 import axios from "axios";
 import { ContactAdmin } from "@/types/contactAdmin";
 
@@ -16,6 +17,13 @@ export default function Admin() {
     data: filteredData,
   });
   const [selectedInquiry, setSelectedInquiry] = useState<null | number>(null);
+  const { categories } = useCategories();
+
+  // カテゴリーIDからカテゴリー名を取得する関数
+  const getCategoryNameById = (id: number): string => {
+    const category = categories.find((cat: Category) => cat.id === id);
+    return category ? category.content : "不明なカテゴリー";
+  };
 
   // データ取得
   const fetchData = async () => {
@@ -111,11 +119,11 @@ export default function Admin() {
           </select>
           <select name="category" value={searchForm.category} onChange={handleChange}>
             <option value="">お問い合わせの種類</option>
-            <option value="1">商品のお届けについて</option>
-            <option value="2">商品の交換について</option>
-            <option value="3">商品トラブル</option>
-            <option value="4">ショップへのお問い合わせ</option>
-            <option value="5">その他</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.content}
+              </option>
+            ))}
           </select>
           <Input type="date" name="date" value={searchForm.date} onChange={handleChange} />
           <Button onClick={handleSearchWithReset} variant="primary" size="medium" className={styles.searchBtn}>
@@ -214,19 +222,7 @@ export default function Admin() {
                   </td>
                   <td>{item.gender === 1 ? "男性" : item.gender === 2 ? "女性" : "その他"}</td>
                   <td>{item.email}</td>
-                  <td>
-                    {item.category_id === 1
-                      ? "商品のお届けについて"
-                      : item.category_id === 2
-                      ? "商品の交換について"
-                      : item.category_id === 3
-                      ? "商品トラブル"
-                      : item.category_id === 4
-                      ? "ショップへのお問い合わせ"
-                      : item.category_id === 5
-                      ? "その他"
-                      : "不明"}
-                  </td>
+                  <td>{getCategoryNameById(Number(item.category_id))}</td>
                   <td>
                     <Button
                       onClick={() => showDetail(item.id)}
@@ -278,16 +274,7 @@ export default function Admin() {
                       <strong>建物名</strong> {item.building}
                     </p>
                     <p>
-                      <strong>お問い合わせの種類</strong>
-                      {item.category_id === 1
-                        ? "商品のお届けについて"
-                        : item.category_id === 2
-                        ? "商品の交換について"
-                        : item.category_id === 3
-                        ? "商品トラブル"
-                        : item.category_id === 4
-                        ? "ショップへのお問い合わせ"
-                        : "その他"}
+                      <strong>お問い合わせの種類</strong> {getCategoryNameById(Number(item.category_id))}
                     </p>
                     <p>
                       <strong>お問い合わせ内容</strong> {item.detail}

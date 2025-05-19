@@ -2,7 +2,7 @@
 export type BaseContact = {
   first_name: string;
   last_name: string;
-  gender: string;
+  gender: number;
   email: string;
   address: string;
   building: string;
