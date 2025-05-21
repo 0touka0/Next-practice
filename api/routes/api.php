@@ -38,6 +38,7 @@ Route::post('/logout', function (Request $request) {
 
 Route::get('/contacts', [ContactController::class, 'index']);
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+Route::get('/contacts/export', [ContactController::class, 'export']);
 
 // カテゴリー一覧を取得するエンドポイント
 Route::get('/categories', [CategoryController::class, 'index']);
