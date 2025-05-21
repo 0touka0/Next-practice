@@ -92,9 +92,30 @@ export default function Admin() {
   };
 
   // エクスポート機能
-  const handleExport = () => {
-    console.log("エクスポート機能が呼び出されました");
-    alert("お問い合わせデータをエクスポートしました");
+  const handleExport = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ""}/api/contacts/export`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("エクスポートに失敗しました");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "contacts.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("エクスポートに失敗しました");
+      console.error(error);
+    }
   };
 
   return (
